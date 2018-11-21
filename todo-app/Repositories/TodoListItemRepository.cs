@@ -10,6 +10,27 @@ namespace todo_app.Repositories
         // avoid the complication of having to connect to a database.
         private readonly List<TodoListItem> _items;
 
+        public TodoListItemRepository()
+        {
+            _items = new List<TodoListItem>
+            {
+                new TodoListItem
+                {
+                    Id = new Guid("00000000000000000000000000000001"),
+                    Description = "Walk the dog",
+                    IsCompleted = false,
+                    IsDeleted = false
+                },
+                new TodoListItem
+                {
+                    Id = new Guid("00000000000000000000000000000002"),
+                    Description = "Wash the cat",
+                    IsCompleted = false,
+                    IsDeleted = false
+                }
+            };
+        }
+
         public TodoListItemRepository(List<TodoListItem> items)
         {
             _items = items;
@@ -23,6 +44,9 @@ namespace todo_app.Repositories
         public TodoListItem AddItem(TodoListItem item)
         {
             item.Id = Guid.NewGuid();
+            item.IsCompleted = false;
+            item.IsDeleted = false;
+
             _items.Add(item);
 
             return item;
@@ -48,6 +72,11 @@ namespace todo_app.Repositories
             if (indexToDelete < 0) throw new InvalidOperationException("Item could not be found");
 
             _items.RemoveAt(indexToDelete);
+        }
+
+        public void DeleteAll()
+        {
+            _items.Clear();
         }
     }
 }

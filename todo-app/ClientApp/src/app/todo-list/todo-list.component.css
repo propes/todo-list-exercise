@@ -1,0 +1,13 @@
+.todo-new-item {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.todo-list {
+    margin-bottom: 20px;
+}
+
+.item-completed {
+    color: #555;
+    text-decoration: line-through;
+}

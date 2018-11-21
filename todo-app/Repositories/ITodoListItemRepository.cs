@@ -10,5 +10,6 @@ namespace todo_app.Repositories
         TodoListItem AddItem(TodoListItem item);
         TodoListItem UpdateItem(TodoListItem item);
         void DeleteItem(TodoListItem item);
+        void DeleteAll();
     }
 }

@@ -1,0 +1,30 @@
+<h1>ToDos</h1>
+
+<div class="todo-new-item">
+    <input type="text"
+        [(ngModel)]="newItemDescription"
+        placeholder="Add a todo"
+        (keyup.enter)="addItem()" />
+</div>
+<div class="todo-list">
+    <table class="table table-condensed">
+        <tr *ngFor="let item of listItems; let i = index"
+            [ngClass]="item.isCompleted ? 'item-completed' : ''">
+            <td>
+                <input type="checkbox"
+                    [(ngModel)]="item.isCompleted"
+                    (ngModelChange)="updateItem(item)"/>
+            </td>
+            <td>
+                {{item.description}}
+            </td>
+            <td>
+                <button (click)="deleteItem(item, i)">delete</button>
+            </td>
+        </tr>
+    </table>
+</div>
+<div>
+    <button (click)="markAllAsComplete()">Mark all as complete</button>
+    <button (click)="deleteAll()">Delete all</button>
+</div>
