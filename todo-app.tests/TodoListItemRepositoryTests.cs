@@ -2,6 +2,7 @@ using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using todo_app.Models;
 using todo_app.Repositories;
 
@@ -38,27 +39,27 @@ namespace todo_app.Tests
         }
 
         [Test]
-        public void GetAllItems_ReturnsAllItems()
+        public async Task GetAllItems_ReturnsAllItems()
         {
-            var items = _repository.GetAllItems();
+            var items = await _repository.GetAllItemsAsync();
 
             Assert.AreEqual(2, items.Count());
         }
 
         [Test]
-        public void AddItem_AddsItemToList()
+        public async Task AddItem_AddsItemToList()
         {
-            _repository.AddItem(new TodoListItem());
+            await _repository.AddItemAsync(new TodoListItem());
 
             Assert.AreEqual(3, _items.Count());
         }
 
         [Test]
-        public void AddItem_AssignsIdToItem()
+        public async Task AddItem_AssignsIdToItem()
         {
             var item = new TodoListItem();
 
-            var newItem = _repository.AddItem(item);
+            var newItem = await _repository.AddItemAsync(item);
 
             Assert.IsNotNull(newItem.Id);
         }
@@ -71,11 +72,11 @@ namespace todo_app.Tests
                 Id = new Guid("99999999999999999999999999999999")
             };
             
-            Assert.Throws<InvalidOperationException>(() =>_repository.UpdateItem(item));
+            Assert.Throws<InvalidOperationException>(() => _repository.UpdateItemAsync(item));
         }
 
         [Test]
-        public void UpdateItem_UpdatesDescription()
+        public async Task UpdateItem_UpdatesDescription()
         {
             var item = new TodoListItem
             {
@@ -83,13 +84,13 @@ namespace todo_app.Tests
                 Description = "Feed the fish"
             };
 
-            var updatedItem = _repository.UpdateItem(item);
+            var updatedItem = await _repository.UpdateItemAsync(item);
 
             Assert.AreEqual("Feed the fish", updatedItem.Description);
         }
 
         [Test]
-        public void UpdateItem_UpdatesIsCompleted()
+        public async Task UpdateItem_UpdatesIsCompleted()
         {
             var item = new TodoListItem
             {
@@ -97,7 +98,7 @@ namespace todo_app.Tests
                 IsCompleted = true
             };
 
-            var updatedItem = _repository.UpdateItem(item);
+            var updatedItem = await _repository.UpdateItemAsync(item);
 
             Assert.IsTrue(updatedItem.IsCompleted);
         }

@@ -19,45 +19,45 @@ namespace todo_app.Controllers
         }
 
         [HttpGet()]
-        public IEnumerable<TodoListItem> GetAllItems()
+        public Task<IEnumerable<TodoListItem>> GetAllItemsAsync()
         {
-            return _repository.GetAllItems();
+            return _repository.GetAllItemsAsync();
         }
 
         [HttpPost()]
-        public TodoListItem AddItem([FromBody] TodoListItem item)
+        public Task<TodoListItem> AddItemAsync([FromBody] TodoListItem item)
         {
-            return _repository.AddItem(item);
+            return _repository.AddItemAsync(item);
         }
 
         [HttpPut()]
-        public TodoListItem UpdateItem([FromBody] TodoListItem item)
+        public Task<TodoListItem> UpdateItemAsync([FromBody] TodoListItem item)
         {
-            return _repository.UpdateItem(item);
+            return _repository.UpdateItemAsync(item);
         }
 
         [HttpDelete("{id}")]
-        public void DeleteItem(Guid id)
+        public Task DeleteItemAsync(Guid id)
         {
-            _repository.DeleteItem(new TodoListItem { Id = id });
+            return _repository.DeleteItemAsync(new TodoListItem { Id = id });
         }
 
         [HttpPut("complete/all")]
-        public void MarkAllItemsCompleted()
+        public async Task MarkAllItemsCompleted()
         {
-            var items = _repository.GetAllItems();
+            var items = await _repository.GetAllItemsAsync();
 
-            items.ToList().ForEach(item =>
+            items.ToList().ForEach(async item =>
             {
                 item.IsCompleted = true;
-                _repository.UpdateItem(item);
+                await _repository.UpdateItemAsync(item);
             });
         }
 
         [HttpDelete("all")]
-        public void DeleteAllItems()
+        public Task DeleteAllItems()
         {
-            _repository.DeleteAll();
+            return _repository.DeleteAllAsync();
         }
     }
 }

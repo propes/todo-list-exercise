@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using todo_app.Models;
 
 namespace todo_app.Repositories
@@ -36,12 +37,12 @@ namespace todo_app.Repositories
             _items = items;
         }
 
-        public IEnumerable<TodoListItem> GetAllItems()
+        public Task<IEnumerable<TodoListItem>> GetAllItemsAsync()
         {
-            return _items;
+            return Task.FromResult<IEnumerable<TodoListItem>>(_items);
         }
 
-        public TodoListItem AddItem(TodoListItem item)
+        public Task<TodoListItem> AddItemAsync(TodoListItem item)
         {
             item.Id = Guid.NewGuid();
             item.IsCompleted = false;
@@ -49,10 +50,10 @@ namespace todo_app.Repositories
 
             _items.Add(item);
 
-            return item;
+            return Task.FromResult(item);
         }
 
-        public TodoListItem UpdateItem(TodoListItem item)
+        public Task<TodoListItem> UpdateItemAsync(TodoListItem item)
         {
             var itemToUpdate = _items.Find(i => i.Id == item.Id);
 
@@ -62,21 +63,21 @@ namespace todo_app.Repositories
             itemToUpdate.Description = item.Description;
             itemToUpdate.IsCompleted = item.IsCompleted;
 
-            return itemToUpdate;
+            return Task.FromResult(itemToUpdate);
         }
 
-        public void DeleteItem(TodoListItem item)
+        public Task DeleteItemAsync(TodoListItem item)
         {
             var indexToDelete = _items.FindIndex(i => i.Id == item.Id);
 
             if (indexToDelete < 0) throw new InvalidOperationException("Item could not be found");
 
-            _items.RemoveAt(indexToDelete);
+            return Task.Run(() =>_items.RemoveAt(indexToDelete));
         }
 
-        public void DeleteAll()
+        public Task DeleteAllAsync()
         {
-            _items.Clear();
+            return Task.Run(() =>_items.Clear());
         }
     }
 }
